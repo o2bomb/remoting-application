@@ -54,7 +54,7 @@ namespace Client
                     LockUI();
                     result = await GetValuesFromIndex(index);
                     UnlockUI();
-                    StatusLabel.Content = "STATUS: Ready to edit";
+                    StatusLabel.Text = "STATUS: Ready to edit";
                     StatusLabel.Background = new SolidColorBrush(Colors.AliceBlue);
                 }
                 else
@@ -63,7 +63,7 @@ namespace Client
                     string query = QueryTextBox.Text;
                     result = await GetValuesFromLName(query);
                     UnlockUI();
-                    StatusLabel.Content = "STATUS: Ready to edit";
+                    StatusLabel.Text = "STATUS: Ready to edit";
                     StatusLabel.Background = new SolidColorBrush(Colors.AliceBlue);
                 }
             }
@@ -125,13 +125,13 @@ namespace Client
                 updateValues();
                 req.AddJsonBody(temp);
                 res = await client.ExecutePostAsync(req);
-                if(res.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                if (res.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    StatusLabel.Content = "ERROR: " + res.ErrorMessage;
+                    StatusLabel.Text = "ERROR: " + res.Content;
                     StatusLabel.Background = new SolidColorBrush(Colors.Crimson);
                 } else
                 {
-                    StatusLabel.Content = "STATUS: Changes submitted";
+                    StatusLabel.Text = "STATUS: Changes submitted";
                     StatusLabel.Background = new SolidColorBrush(Colors.AliceBlue);
                 }
             }
@@ -142,7 +142,7 @@ namespace Client
                 {
                     info = e.Message;
                 }
-                StatusLabel.Content = "ERROR: " + info;
+                StatusLabel.Text = "ERROR: " + info;
                 StatusLabel.Background = new SolidColorBrush(Colors.Crimson);
             }
             catch (ArgumentNullException e)
@@ -152,7 +152,7 @@ namespace Client
                 {
                     info = e.Message;
                 }
-                StatusLabel.Content = "ERROR: " + info;
+                StatusLabel.Text = "ERROR: " + info;
                 StatusLabel.Background = new SolidColorBrush(Colors.Crimson);
             }
             return res;
@@ -171,6 +171,10 @@ namespace Client
             if (Int32.Parse(PinTextBox.Text) < 0)
             {
                 throw new FormatException("PIN cannot be a negative number");
+            }
+            if (PinTextBox.Text.Length > 4)
+            {
+                throw new FormatException("PIN cannot consist of more than 4 numbers");
             }
             temp.pin = (uint)Int32.Parse(PinTextBox.Text);
             if(FNameTextBox.Text.Length < 1)
@@ -194,7 +198,7 @@ namespace Client
             PinTextBox.IsReadOnly = true;
             FNameTextBox.IsReadOnly = true;
             LNameTextBox.IsReadOnly = true;
-            StatusLabel.Content = "STATUS: Loading";
+            StatusLabel.Text = "STATUS: Loading";
             StatusLabel.Background = new SolidColorBrush(Colors.Fuchsia);
             SearchButton.IsEnabled = false;
             EditButton.IsEnabled = false;

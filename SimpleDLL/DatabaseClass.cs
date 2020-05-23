@@ -118,10 +118,10 @@ namespace SimpleDLL
             {
                 dataStructs.ElementAt(index).acctNo = newAcctNo;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException e)
             {
                 // If the element cannot be found
-                throw new ArgumentOutOfRangeException("User cannot be found at specified index");
+                throw new ArgumentOutOfRangeException("User cannot be found at specified index", e);
             }
         }
 
@@ -131,10 +131,10 @@ namespace SimpleDLL
             {
                 dataStructs.ElementAt(index).pin = newPin;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException e)
             {
                 // If the element cannot be found
-                throw new ArgumentOutOfRangeException("User cannot be found at specified index");
+                throw new ArgumentOutOfRangeException("User cannot be found at specified index", e);
             }
         }
 
@@ -150,10 +150,10 @@ namespace SimpleDLL
             {
                 dataStructs.ElementAt(index).firstName = newFName;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException e)
             {
                 // If the element cannot be found
-                throw new ArgumentOutOfRangeException("User cannot be found at specified index");
+                throw new ArgumentOutOfRangeException("User cannot be found at specified index", e);
             }
         }
 
@@ -169,10 +169,10 @@ namespace SimpleDLL
             {
                 dataStructs.ElementAt(index).lastName = newLName;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException e)
             {
                 // If the element cannot be found
-                throw new ArgumentOutOfRangeException("User cannot be found at specified index");
+                throw new ArgumentOutOfRangeException("User cannot be found at specified index", e);
             }
         }
 
@@ -182,10 +182,10 @@ namespace SimpleDLL
             {
                 dataStructs.ElementAt(index).balance = newBalance;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException e)
             {
                 // If the element cannot be found
-                throw new ArgumentOutOfRangeException("User cannot be found at specified index");
+                throw new ArgumentOutOfRangeException("User cannot be found at specified index", e);
             }
         }
     }

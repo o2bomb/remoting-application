@@ -21,14 +21,14 @@ namespace WebService.Controllers
             {
                 db.EditValuesFromIndex(id, value.acct, value.pin, value.bal, value.fName, value.lName, value.profileImg);
             }
-            catch (FaultException<SimpleDLL.DatabaseFault> e)
+            catch (ArgumentException e)
             {
-                Console.WriteLine("stopped at controller");
-                // Catch any database exceptions thrown and throw an HTTP exception across the network, to the client
+                // Catch exception thrown and throw an HTTP exception across the network, to the client
                 var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new StringContent(String.Format("Failed to perform {0} operation on database", e.Detail.Operation)),
-                    ReasonPhrase = e.Detail.ProblemType
+                    Content = new StringContent(String.Format("{0}", e.Message)),
+                    // ReasonPhrase cannot contain any newline characters for some reason, so remove them
+                    ReasonPhrase = e.Message.Replace('\n',  ' ').Replace('\r', ' ')
                 };
                 throw new HttpResponseException(response);
             }
