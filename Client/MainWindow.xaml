@@ -1,0 +1,34 @@
+﻿<Window x:Class="Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="432.4" Width="487.2">
+    <Grid Margin="0,0,-6.2,0.4">
+        <TextBox Name="FNameTextBox" HorizontalAlignment="Left" Height="32" Margin="134,65,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" FontSize="16" FontFamily="Microsoft YaHei UI Light"/>
+        <TextBox Name="LNameTextBox" HorizontalAlignment="Left" Height="32" Margin="134,102,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" FontSize="16" FontFamily="Microsoft YaHei UI Light"/>
+        <TextBox Name="AcctNoTextBox" HorizontalAlignment="Left" Height="32" Margin="134,140,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" FontSize="16" FontFamily="Microsoft YaHei UI Light"/>
+        <TextBox Name="PinTextBox" HorizontalAlignment="Left" Height="32" Margin="134,177,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" FontSize="16" FontFamily="Microsoft YaHei UI Light"/>
+        <TextBox Name="BalanceTextBox" HorizontalAlignment="Left" Height="32" Margin="134,214,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" FontSize="16" FontFamily="Microsoft YaHei UI Light"/>
+        <Label Content="First name" HorizontalAlignment="Left" Margin="26,69,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="16"/>
+        <Label Content="Last name" HorizontalAlignment="Left" Margin="26,106,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="16"/>
+        <Label Content="Account no." HorizontalAlignment="Left" Margin="26,144,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="16"/>
+        <Label Content="Pin" HorizontalAlignment="Left" Margin="26,181,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="16"/>
+        <Label Content="Balance" HorizontalAlignment="Left" Margin="26,216,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="16"/>
+        <Button Name="SearchButton"  Content="Search" HorizontalAlignment="Left" Margin="297,282,0,0" VerticalAlignment="Top" Width="156" Height="38" Click="Button_Click"/>
+        <TextBox Name="QueryTextBox" HorizontalAlignment="Left" Height="38" Margin="24,282,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="260" FontSize="16" FontFamily="Microsoft YaHei UI Light"/>
+        <Label Content="Total number of items in database:" HorizontalAlignment="Left" Margin="26,361,0,0" VerticalAlignment="Top" Width="192" FontStyle="Italic" Opacity="0.7"/>
+        <Label Name="NumRecordsTextBox" Content="0" HorizontalAlignment="Left" Margin="223,361,0,0" VerticalAlignment="Top" Width="117" FontStyle="Italic" Opacity="0.7"/>
+        <Rectangle Fill="#FF4141B6" HorizontalAlignment="Left" Height="120" Margin="333,28,0,0" Stroke="Black" VerticalAlignment="Top" Width="120"/>
+        <Image Name="ProfileImage" HorizontalAlignment="Left" Height="100" Margin="344,38,0,0" VerticalAlignment="Top" Width="100"/>
+        <ProgressBar Name="ProgressIndicator" HorizontalAlignment="Left" Height="6" VerticalAlignment="Top" Width="487"/>
+        <Label Content="Index" HorizontalAlignment="Left" Margin="26,34,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="16"/>
+        <TextBox Name="IndexTextBox" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="134,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" FontSize="16" FontFamily="Microsoft YaHei UI Light"/>
+        <Label Content="Enter an index OR a last name to search by: " HorizontalAlignment="Left" Margin="24,256,0,0" VerticalAlignment="Top" Width="241" Opacity="0.7"/>
+        <Button Name="EditButton"  Content="Submit Changes" HorizontalAlignment="Left" Margin="297,323,0,0" VerticalAlignment="Top" Width="156" Height="38" Click="EditButton_Click"/>
+        <Label Name="StatusLabel" Content="STATUS: Ready to edit" HorizontalAlignment="Left" Margin="26,325,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="16" Width="258" Height="36" Background="#FFAAE8FF"/>
+        <Button Name="AddImageButton"  Content="Edit/Add Image" HorizontalAlignment="Left" Margin="333,153,0,0" VerticalAlignment="Top" Width="120" Height="38" Click="AddImageButton_Click"/>
+    </Grid>
+</Window>
