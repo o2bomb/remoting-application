@@ -95,7 +95,7 @@ namespace SimpleDLL
             }
         }
 
-        public Bitmap GetProfileImgByIndex(int index)
+        public byte[] GetProfileImgByIndex(int index)
         {
             try
             {
@@ -181,6 +181,19 @@ namespace SimpleDLL
             try
             {
                 dataStructs.ElementAt(index).balance = newBalance;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                // If the element cannot be found
+                throw new ArgumentOutOfRangeException("User cannot be found at specified index", e);
+            }
+        }
+
+        public void EditProfileImgByIndex(int index, byte[] newProfileImg)
+        {
+            try
+            {
+                dataStructs.ElementAt(index).profileImg = newProfileImg;
             }
             catch (ArgumentOutOfRangeException e)
             {

@@ -15,7 +15,7 @@ namespace APIClasses
         public uint pin;
         public string fName;
         public string lName;
-        public Bitmap profileImg;
+        public byte[] profileImg;
 
         public DataIntermed()
         {

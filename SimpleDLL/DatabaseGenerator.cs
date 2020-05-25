@@ -50,13 +50,13 @@ namespace SimpleDLL
             return balance;
         }
 
-        private Bitmap GetProfileImg()
+        private byte[] GetProfileImg()
         {
             // Instantiate each profile pic as null. The user can insert their own later
             return null;
         }
 
-        public void GetNextAccount(out uint pin, out uint acctNo, out string firstName, out string lastName, out int balance, out Bitmap profileImg)
+        public void GetNextAccount(out uint pin, out uint acctNo, out string firstName, out string lastName, out int balance, out byte[] profileImg)
         {
             pin = GetPIN();
             acctNo = GetAcctNo();

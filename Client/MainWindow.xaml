@@ -23,7 +23,7 @@
         <Label Name="NumRecordsTextBox" Content="0" HorizontalAlignment="Left" Margin="223,382,0,0" VerticalAlignment="Top" Width="117" FontStyle="Italic" Opacity="0.7"/>
         <Rectangle Fill="#FF4141B6" HorizontalAlignment="Left" Height="181" Margin="411,28,0,0" Stroke="Black" VerticalAlignment="Top" Width="181"/>
         <Image Name="ProfileImage" HorizontalAlignment="Left" Height="150" Margin="428,44,0,0" VerticalAlignment="Top" Width="150"/>
-        <ProgressBar Name="ProgressIndicator" HorizontalAlignment="Left" Height="6" VerticalAlignment="Top" Width="487"/>
+        <ProgressBar Name="ProgressIndicator" HorizontalAlignment="Left" Height="6" VerticalAlignment="Top" Width="621"/>
         <Label Content="Index" HorizontalAlignment="Left" Margin="26,34,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="16"/>
         <TextBox Name="IndexTextBox" IsReadOnly="True" HorizontalAlignment="Left" Height="32" Margin="134,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" FontSize="16" FontFamily="Microsoft YaHei UI Light"/>
         <Label Content="Enter an index OR a last name (case sensitive) to search by: " HorizontalAlignment="Left" Margin="24,256,0,0" VerticalAlignment="Top" Width="324" Opacity="0.7"/>

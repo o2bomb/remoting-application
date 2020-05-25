@@ -14,9 +14,9 @@ namespace SimpleDLL
         [OperationContract]
         int GetNumEntries();
         [OperationContract]
-        void GetValuesForEntry(int index, out uint acctNo, out uint pin, out int bal, out string fName, out string lName, out Bitmap profileImg);
+        void GetValuesForEntry(int index, out uint acctNo, out uint pin, out int bal, out string fName, out string lName, out byte[] profileImg);
         [OperationContract]
         [FaultContract(typeof(DatabaseFault))]
-        void EditValuesForEntry(int index, uint acctNo, uint pin, int bal, string fName, string lName, Bitmap profileImg);
+        void EditValuesForEntry(int index, uint acctNo, uint pin, int bal, string fName, string lName, byte[] profileImg);
     }
 }

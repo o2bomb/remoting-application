@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using APIClasses;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace Client
 {
@@ -76,7 +77,13 @@ namespace Client
             AcctNoTextBox.Text = result.acct.ToString();
             PinTextBox.Text = result.pin.ToString("D4");
             if(result.profileImg != null)
-                ProfileImage.Source = BitmapToImageSource(result.profileImg);
+            {
+                ProfileImage.Source = ByteArrayToImageSource(result.profileImg);
+            }
+            else
+            {
+                ProfileImage.Source = null;
+            }
         }
 
         // Click handler for Submit changes button
@@ -87,10 +94,22 @@ namespace Client
             UnlockUI();
         }
 
-        // Click handler for Add/Edit Image button
+        // Click handler for Add/Edit Image button. Loads in an image
+        /**
+         * SOURCE:
+         *  - https://www.godo.dev/tutorials/wpf-load-external-image/
+         **/
         private void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("blah");
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "Load in a picture";
+            dialog.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|Portable Network Graphic (*.png)|*.png";
+
+            if (dialog.ShowDialog() == true)
+            {
+                BitmapImage image = new BitmapImage(new Uri(dialog.FileName));
+                ProfileImage.Source = image;
+            }
         }
 
         // Make a request to the server to find a user based on their index in the database
@@ -137,20 +156,20 @@ namespace Client
             }
             catch (FormatException e)
             {
-                String info = "Field(s) contains invalid characters";
+                String info = "Field(s) contains invalid characters, ";
                 if (e.Message.Length > 0)
                 {
-                    info = e.Message;
+                    info += e.Message;
                 }
                 StatusLabel.Text = "ERROR: " + info;
                 StatusLabel.Background = new SolidColorBrush(Colors.Crimson);
             }
             catch (ArgumentNullException e)
             {
-                String info = "Field(s) cannot be left empty";
+                String info = "Field(s) cannot be left empty, ";
                 if (e.Message.Length > 0)
                 {
-                    info = e.Message;
+                    info += e.Message;
                 }
                 StatusLabel.Text = "ERROR: " + info;
                 StatusLabel.Background = new SolidColorBrush(Colors.Crimson);
@@ -186,7 +205,9 @@ namespace Client
             {
                 throw new ArgumentNullException("Last name cannot be empty");
             }
-            temp.lName = LNameTextBox.Text;            
+            temp.lName = LNameTextBox.Text;
+            if (ProfileImage.Source != null)
+                temp.profileImg = ImageSourceToByteArray(ProfileImage.Source as BitmapImage);
         }
 
         // Lock the UI (i.e. Show a loading bar, and lock text fields)
@@ -200,6 +221,7 @@ namespace Client
             LNameTextBox.IsReadOnly = true;
             StatusLabel.Text = "STATUS: Loading";
             StatusLabel.Background = new SolidColorBrush(Colors.Fuchsia);
+            AddImageButton.IsEnabled = false;
             SearchButton.IsEnabled = false;
             EditButton.IsEnabled = false;
             ProgressIndicator.IsIndeterminate = true;
@@ -214,16 +236,39 @@ namespace Client
             PinTextBox.IsReadOnly = false;
             FNameTextBox.IsReadOnly = false;
             LNameTextBox.IsReadOnly = false;
+            AddImageButton.IsEnabled = true;
             SearchButton.IsEnabled = true;
             EditButton.IsEnabled = true;
             ProgressIndicator.IsIndeterminate = false;
         }
 
-        /*
-         *  Converts the Bitmap image into something that can be displayed easily in WPF
-            SOURCE(s):
-                - https://stackoverflow.com/questions/22499407/how-to-display-a-bitmap-in-a-wpf-image
-        */
+        /**
+         * Converts the byte array into something that can be displayed easily in WPF (ImageSource)
+         **/
+        private ImageSource ByteArrayToImageSource(byte[] array)
+        {
+            ImageSource source = (ImageSource)new ImageSourceConverter().ConvertFrom(array);
+            return source;
+        }
+
+        /**
+         * Converts the image source to a byte array
+         **/
+        private byte[] ImageSourceToByteArray(BitmapImage source)
+        {
+            MemoryStream memStream = new MemoryStream();
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(source));
+            encoder.Save(memStream);
+
+            return memStream.ToArray();
+        }
+
+        /**
+         * Converts the Bitmap object into something that can be displayed easily in WPF (BitmapImage)
+         * SOURCE(s):
+         *  - https://stackoverflow.com/questions/22499407/how-to-display-a-bitmap-in-a-wpf-image
+         **/
         private BitmapImage BitmapToImageSource(Bitmap bitmap)
         {
             using (MemoryStream memory = new MemoryStream())
@@ -240,5 +285,22 @@ namespace Client
             }
         }
 
+        /**
+         * Converts the BitmapImage into a pure Bitmap object
+         * SOURCE(s):
+         *  - https://stackoverflow.com/questions/6484357/converting-bitmapimage-to-bitmap-and-vice-versa
+         **/
+        private Bitmap ImageSourceToBitmap(BitmapImage source)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                BitmapEncoder encoder = new BmpBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(source));
+                encoder.Save(memory);
+                Bitmap bitmap = new Bitmap(memory);
+
+                return new Bitmap(bitmap);
+            }
+        }
     }
 }

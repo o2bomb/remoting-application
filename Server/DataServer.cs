@@ -23,7 +23,7 @@ namespace Server
             return database.GetNumRecords();
         }
 
-        public void GetValuesForEntry(int index, out uint acctNo, out uint pin, out int bal, out string fName, out string lName, out Bitmap profileImg)
+        public void GetValuesForEntry(int index, out uint acctNo, out uint pin, out int bal, out string fName, out string lName, out byte[] profileImg)
         {
             // Log the operation
             Console.WriteLine("Accessing user at index: " + index);
@@ -35,7 +35,7 @@ namespace Server
             profileImg = database.GetProfileImgByIndex(index);
         }
 
-        public void EditValuesForEntry(int index, uint acctNo, uint pin, int bal, string fName, string lName, Bitmap profileImg)
+        public void EditValuesForEntry(int index, uint acctNo, uint pin, int bal, string fName, string lName, byte[] profileImg)
         {
             Console.WriteLine("Attempting to edit user at index: " + index);
             try
@@ -45,6 +45,7 @@ namespace Server
                 database.EditBalanceByIndex(index, bal);
                 database.EditFirstNameByIndex(index, fName);
                 database.EditLastNameByIndex(index, lName);
+                database.EditProfileImgByIndex(index, profileImg);
                 // Log the operation
                 Console.WriteLine("Successfully edited user at index: " + index);
                 Console.WriteLine(String.Format("First name: {0}", fName));
@@ -52,6 +53,8 @@ namespace Server
                 Console.WriteLine(String.Format("Account No: {0}", acctNo));
                 Console.WriteLine(String.Format("PIN: {0}", pin));
                 Console.WriteLine(String.Format("Balance: {0}", bal));
+                if(profileImg != null)
+                    Console.WriteLine(String.Format("Profile image: {0}", profileImg.ToString()));
             }
             catch (ArgumentOutOfRangeException e)
             {

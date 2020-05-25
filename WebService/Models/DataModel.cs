@@ -100,7 +100,7 @@ namespace WebService.Models
         /**
          * Edits the user's details based on the specified index and given details to edit
          */
-        public void EditValuesFromIndex(int index, uint acctNo, uint pin, int bal, string fName, string lName, Bitmap profileImg)
+        public void EditValuesFromIndex(int index, uint acctNo, uint pin, int bal, string fName, string lName, byte[] profileImg)
         {
             logNumber++;
             Log(String.Format("OPERATION: Edit a user at specified index {0} with the following values: ", index));
@@ -109,6 +109,8 @@ namespace WebService.Models
             Log(String.Format("Account No: {0}", acctNo));
             Log(String.Format("PIN: {0}", pin));
             Log(String.Format("Balance: {0}", bal));
+            if(profileImg != null)
+                Log(String.Format("Profile Image: {0}", profileImg.ToString()));
             try
             {
                 foob.EditValuesForEntry(index, acctNo, pin, bal, fName, lName, profileImg);

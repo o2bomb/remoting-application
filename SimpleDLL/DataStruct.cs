@@ -14,7 +14,7 @@ namespace SimpleDLL
         public int balance;
         public string firstName;
         public string lastName;
-        public Bitmap profileImg;
+        public byte[] profileImg;
 
         public DataStruct()
         {
