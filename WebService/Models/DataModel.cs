@@ -117,11 +117,16 @@ namespace WebService.Models
             }
             catch (FaultException<DatabaseFault> e)
             {
-                // When an error occurs, log it as well
+                // When an database error occurs, log it as well
                 string errorMessage = String.Format("Failed to perform {0}, {1}", e.Detail.Operation, e.Detail.ProblemType);
                 Log(String.Format("ERROR: {0}", errorMessage));
                 // Throw an exception to the controllers
                 throw new ArgumentException(errorMessage);
+            }
+            catch (CommunicationException e)
+            {
+                // When the image is too large, then throw an exception to the controller
+                throw new CommunicationException(e.Message);
             }
         }
     }

@@ -19,6 +19,7 @@ using RestSharp;
 using APIClasses;
 using System.Threading;
 using Microsoft.Win32;
+using System.Net;
 
 namespace Client
 {
@@ -39,7 +40,14 @@ namespace Client
 
             RestRequest req = new RestRequest("api/values");
             IRestResponse res = client.Get(req);
-            NumRecordsTextBox.Content = res.Content;
+            Console.WriteLine(res.StatusCode + "blah");
+            if (res.StatusCode == HttpStatusCode.ServiceUnavailable || res.StatusCode == 0)
+            {
+                StatusLabel.Text = "ERROR: Server connection cannot be established. This application requires a connection to the server in order to function properly";
+            } else
+            {
+                NumRecordsTextBox.Content = res.Content;
+            }
         }
 
         // Click handler for search button
@@ -68,21 +76,23 @@ namespace Client
                     StatusLabel.Background = new SolidColorBrush(Colors.AliceBlue);
                 }
             }
-
-            this.temp = result;
-            IndexTextBox.Text = result.index.ToString();
-            FNameTextBox.Text = result.fName;
-            LNameTextBox.Text = result.lName;
-            BalanceTextBox.Text = result.bal.ToString();
-            AcctNoTextBox.Text = result.acct.ToString();
-            PinTextBox.Text = result.pin.ToString("D4");
-            if(result.profileImg != null)
+            if(result != null)
             {
-                ProfileImage.Source = ByteArrayToImageSource(result.profileImg);
-            }
-            else
-            {
-                ProfileImage.Source = null;
+                this.temp = result;
+                IndexTextBox.Text = result.index.ToString();
+                FNameTextBox.Text = result.fName;
+                LNameTextBox.Text = result.lName;
+                BalanceTextBox.Text = result.bal.ToString();
+                AcctNoTextBox.Text = result.acct.ToString();
+                PinTextBox.Text = result.pin.ToString("D4");
+                if(result.profileImg != null)
+                {
+                    ProfileImage.Source = ByteArrayToImageSource(result.profileImg);
+                }
+                else
+                {
+                    ProfileImage.Source = null;
+                }
             }
         }
 
@@ -144,11 +154,17 @@ namespace Client
                 updateValues();
                 req.AddJsonBody(temp);
                 res = await client.ExecutePostAsync(req);
-                if (res.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                if (res.StatusCode == HttpStatusCode.BadRequest)
                 {
                     StatusLabel.Text = "ERROR: " + res.Content;
                     StatusLabel.Background = new SolidColorBrush(Colors.Crimson);
-                } else
+                } 
+                else if (res.StatusCode == HttpStatusCode.RequestEntityTooLarge)
+                {
+                    StatusLabel.Text = "ERROR: The server has failed the request as it cannot process the sent amount of data (image is probably too large, try sending a smaller one).";
+                    StatusLabel.Background = new SolidColorBrush(Colors.Crimson);
+                }
+                else
                 {
                     StatusLabel.Text = "STATUS: Changes submitted";
                     StatusLabel.Background = new SolidColorBrush(Colors.AliceBlue);
@@ -177,7 +193,7 @@ namespace Client
             return res;
         }
 
-        // Update temp to reflect the currently inputted values
+        // Update temp to reflect the currently inputted values. temp holds the data that will be sent to the web api
         private void updateValues()
         {
             temp.index = Int32.Parse(IndexTextBox.Text);
@@ -206,8 +222,9 @@ namespace Client
                 throw new ArgumentNullException("Last name cannot be empty");
             }
             temp.lName = LNameTextBox.Text;
+            Console.WriteLine(ProfileImage.Source);
             if (ProfileImage.Source != null)
-                temp.profileImg = ImageSourceToByteArray(ProfileImage.Source as BitmapImage);
+                temp.profileImg = ImageSourceToByteArray(ProfileImage.Source as BitmapSource);
         }
 
         // Lock the UI (i.e. Show a loading bar, and lock text fields)
@@ -245,62 +262,23 @@ namespace Client
         /**
          * Converts the byte array into something that can be displayed easily in WPF (ImageSource)
          **/
-        private ImageSource ByteArrayToImageSource(byte[] array)
+        private BitmapSource ByteArrayToImageSource(byte[] array)
         {
-            ImageSource source = (ImageSource)new ImageSourceConverter().ConvertFrom(array);
+            BitmapSource source = (BitmapSource)new ImageSourceConverter().ConvertFrom(array);
             return source;
         }
 
         /**
          * Converts the image source to a byte array
          **/
-        private byte[] ImageSourceToByteArray(BitmapImage source)
+        private byte[] ImageSourceToByteArray(BitmapSource source)
         {
-            MemoryStream memStream = new MemoryStream();
-            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(source));
-            encoder.Save(memStream);
-
-            return memStream.ToArray();
-        }
-
-        /**
-         * Converts the Bitmap object into something that can be displayed easily in WPF (BitmapImage)
-         * SOURCE(s):
-         *  - https://stackoverflow.com/questions/22499407/how-to-display-a-bitmap-in-a-wpf-image
-         **/
-        private BitmapImage BitmapToImageSource(Bitmap bitmap)
-        {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                memory.Position = 0;
-                BitmapImage bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                bitmapimage.StreamSource = memory;
-                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit();
-
-                return bitmapimage;
-            }
-        }
-
-        /**
-         * Converts the BitmapImage into a pure Bitmap object
-         * SOURCE(s):
-         *  - https://stackoverflow.com/questions/6484357/converting-bitmapimage-to-bitmap-and-vice-versa
-         **/
-        private Bitmap ImageSourceToBitmap(BitmapImage source)
-        {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                BitmapEncoder encoder = new BmpBitmapEncoder();
+                MemoryStream memStream = new MemoryStream();
+                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(source));
-                encoder.Save(memory);
-                Bitmap bitmap = new Bitmap(memory);
+                encoder.Save(memStream);
 
-                return new Bitmap(bitmap);
-            }
+                return memStream.ToArray();
         }
     }
 }
