@@ -7,6 +7,7 @@ A .NET remoting application that consists of a WCF .NET remoting interface (data
 - Edit existing user in database
 - File-based logging for business tier
 - Console-based logging for data tier
+- Complete exception handling between the presentation, business, and data tier
 
 ## Project structure
 - **/Client** contains the WPF client
